@@ -42,6 +42,7 @@ const url = process.env.VITE_DEV_SERVER_URL
 const indexHtml = join(process.env.DIST, 'index.html')
 
 Menu.setApplicationMenu(null)
+
 async function createWindow() {
   win = new BrowserWindow({
     title: 'Mundo dos Bichos',
@@ -74,7 +75,8 @@ async function createWindow() {
   update(win)
 }
 
-app.whenReady().then(createWindow)
+// app.whenReady().then(createWindow)
+app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
   win = null
