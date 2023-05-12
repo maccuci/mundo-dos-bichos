@@ -19,7 +19,7 @@ As tecnologias e linguagens utlizadas neste projetos são as conseguintes:
  - TailwindCSS
 
 ## Aplicação
-Para dar início a aplicação em ambiente de desenvolvivendo rode.
+Para dar início a aplicação em ambiente de desenvolvivendo rode:
 > yarn dev
 
 Para criar o instalador do painel rode:
