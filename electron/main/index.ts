@@ -43,7 +43,7 @@ const indexHtml = join(process.env.DIST, 'index.html')
 
 async function createWindow() {
   win = new BrowserWindow({
-    title: 'Main window',
+    title: 'Mundo dos Bichos',
     icon: join(process.env.PUBLIC, 'favicon.ico'),
     webPreferences: {
       preload,
@@ -55,7 +55,7 @@ async function createWindow() {
     },
   })
 
-  if (url) { // electron-vite-vue#298
+  if (url) {
     win.loadURL(url)
   } else {
     win.loadFile(indexHtml)
