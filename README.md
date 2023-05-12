@@ -17,3 +17,13 @@ As tecnologias e linguagens utlizadas neste projetos são as conseguintes:
  - MySQL
  - Vite
  - TailwindCSS
+
+## Aplicação
+Para dar início a aplicação em ambiente de desenvolvivendo rode:
+``
+yarn dev
+``
+Para criar o instalador do painel rode:
+``
+yarn build
+``
