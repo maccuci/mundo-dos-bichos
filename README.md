@@ -19,11 +19,14 @@ As tecnologias e linguagens utlizadas neste projetos são as conseguintes:
  - TailwindCSS
 
 ## Aplicação
-Para instalar os pacotes referentes ao npm use
+Para instalar os pacotes referentes ao npm
 > cd mundo-dos-bichos && yarn
 
-Para dar início a aplicação em ambiente de desenvolvivendo use
+Para dar início a aplicação em ambiente de desenvolvivendo
 > yarn dev
 
-Para criar o instalador do painel use
+Para utilizar a versão de desenvolvedor
+> yarn dev
+
+Para utilizar a versão de final e criar o instalador
 > yarn build
