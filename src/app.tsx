@@ -5,9 +5,6 @@ import Clients from "./pages/clients";
 
 const App = () => {
   return (
-    // <div>
-    //   <Masthead />
-    // </div>
     <Router>
       <Routes>
         <Route path="/" element={<Masthead />} />
