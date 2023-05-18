@@ -1,6 +1,6 @@
-import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, Menu, Notification } from 'electron'
 import { release } from 'node:os'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import { update } from './update'
 
 // The built directory structure
@@ -75,8 +75,12 @@ async function createWindow() {
   update(win)
 }
 
-// app.whenReady().then(createWindow)
-app.on('ready', createWindow)
+const noti = () => {
+  new Notification({ title: 'Aviso', body: 'A aplicação Mundo dos Bichos foi iniciada!' }).show()
+}
+
+app.whenReady().then(createWindow).then(noti)
+// app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
   win = null
