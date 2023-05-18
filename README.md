@@ -25,8 +25,5 @@ Para instalar os pacotes referentes ao npm
 Para dar início a aplicação em ambiente de desenvolvivendo
 > yarn dev
 
-Para utilizar a versão de desenvolvedor
-> yarn dev
-
 Para utilizar a versão de final e criar o instalador
 > yarn build
