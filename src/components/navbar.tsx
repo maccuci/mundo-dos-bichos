@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { createCustomer } from "../backend/client-controller";
+import { createCustomer } from "../backend/customer/client-controller";
 
 const Navbar = () => {
     const handle = () => {

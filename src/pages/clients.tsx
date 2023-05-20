@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import ClientItem from "@/components/client-item";
-import {clients} from "@/components/list-clients";
+import {clients} from "@/backend/customer/list-clients";
 
 const Clients = () => {
     const itemsPerPage = 4;
