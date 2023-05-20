@@ -2,6 +2,7 @@ import { app, BrowserWindow, shell, ipcMain, Menu, Notification } from 'electron
 import { release } from 'node:os'
 import { join, resolve } from 'node:path'
 import { update } from './update'
+import {createConnection} from "../../src/backend/mysql";
 
 // The built directory structure
 //
@@ -79,8 +80,13 @@ const noti = () => {
   new Notification({ title: 'Aviso', body: 'A aplicação Mundo dos Bichos foi iniciada!' }).show()
 }
 
-app.whenReady().then(createWindow).then(noti)
-// app.on('ready', createWindow)
+// app.whenReady().then(createWindow).then(noti)
+app.whenReady().then(() => {
+  createWindow()
+  noti()
+  createConnection()
+})
+//app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
   win = null
