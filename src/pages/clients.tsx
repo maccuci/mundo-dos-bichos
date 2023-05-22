@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { listCustomers } from "../backend/customer/client-controller";
 
 const Clients = () => {
     const itemsPerPage = 4;

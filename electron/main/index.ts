@@ -2,7 +2,7 @@ import { app, BrowserWindow, shell, ipcMain, Menu, Notification } from 'electron
 import { release } from 'node:os'
 import { join, resolve } from 'node:path'
 import { update } from './update'
-import {createConnection} from "../../src/backend/mysql";
+import {closeConnection, createConnection} from "../../src/backend/mysql";
 
 // The built directory structure
 //
@@ -90,7 +90,10 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   win = null
-  if (process.platform !== 'darwin') app.quit()
+  if (process.platform !== 'darwin') {
+    app.quit()
+    closeConnection()
+  }
 })
 
 app.on('second-instance', () => {
