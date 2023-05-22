@@ -33,5 +33,4 @@ yarn.lock
 /test-results/
 
 #my files
-src/backend
-/src/backend
+/src/backend/

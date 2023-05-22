@@ -1,31 +1,17 @@
+
 type Props = {
     id: number;
     name: string;
-    description: string;
-    action?: ClientAction;
+    service?: string;
     className?: string;
 }
 
-const ClientItem = ({id, name, description, action, className}: Props) => {
-    const handleAction = (action: ClientAction | undefined) => {
-        switch (action) {
-            case ClientAction.CREATE:
-                break;
-            case ClientAction.UPDATE:
-                break;
-            case ClientAction.DELETE:
-                break;
-            default:
-                break;
-        }
-    }
-
+const ClientItem = ({id, name, service, className}: Props) => {
     return (
         <div>
             <li key={id} className={`${className}`}>
                 <p className="text-center">{name}</p>
-                <p className="text-center">{description}</p>
-                <button onClick={() => handleAction(action)}></button>
+                <p className="text-center">{service}</p>
             </li>
         </div>
     )
