@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Masthead from "@/components/masthead";
 import {AuthContext} from "@/components/auth-context";
 import {AiFillEye, AiFillEyeInvisible} from "react-icons/all";
@@ -52,6 +52,10 @@ export const Auth = () => {
         }
     };
 
+    useEffect(() => {
+        console.log("ALOUUU")
+    })
+
     if (isAuthenticated) {
         return (
             <div>
@@ -59,6 +63,7 @@ export const Auth = () => {
             </div>
         );
     }
+
     return (
         <div className="flex flex-col items-center justify-center">
             <h1 className="text-2xl font-bold mt-4">Página de Login</h1>

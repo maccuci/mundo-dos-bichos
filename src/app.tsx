@@ -6,6 +6,7 @@ import Schedules from "@/pages/schedules";
 import Services from "@/pages/services";
 import {AuthProvider} from "@/components/auth-context";
 import Auth from "@/pages/auth";
+import Debug from "@/pages/debug";
 
 const App = () => {
     return (
@@ -14,7 +15,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Auth/>}/>
                     <Route path="/home" element={<Masthead/>}/>
-                    <Route path="/clients" element={<Clients/>}/>
+                    <Route path="/clients" element={<Debug/>}/>
                     <Route path="/schedules" element={<Schedules/>}/>
                     <Route path="/services" element={<Services/>}/>
                 </Routes>

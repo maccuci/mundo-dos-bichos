@@ -1,5 +1,5 @@
 import mysql, {Connection} from "mysql2"
-import { listCustomers, getCustomer, createCustomer } from "../backend/customer/client-controller"
+import { listCustomers } from "../backend/customer/client-controller"
 import Query from "mysql2/typings/mysql/lib/protocol/sequences/Query";
 
 const connection = mysql.createConnection({
