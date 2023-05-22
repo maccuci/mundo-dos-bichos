@@ -1,4 +1,6 @@
-import mysql from "mysql2"
+import mysql, {Connection} from "mysql2"
+import { listCustomers, getCustomer, createCustomer } from "../backend/customer/client-controller"
+import Query from "mysql2/typings/mysql/lib/protocol/sequences/Query";
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -14,18 +16,28 @@ export function createConnection() {
             return;
         }
         console.log('Conexão bem-sucedida ao banco de dados MySQL!');
-        executeQuery('CREATE TABLE IF NOT EXISTS `customers` (`id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, `petName` VARCHAR(64) NOT NULL, `petService` VARCHAR(64) NOT NULL, `email` VARCHAR(64) NOT NULL, `phone` VARCHAR(64) NOT NULL, PRIMARY KEY(`id`)) ENGINE = InnoDB DEFAULT CHARSET = UTF8;')
+        executeQuery('CREATE TABLE IF NOT EXISTS `customers` (`id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, `petName` VARCHAR(64) NOT NULL, `petService` VARCHAR(64) NOT NULL, `email` VARCHAR(64) NOT NULL, `phone` VARCHAR(64) NOT NULL, PRIMARY KEY(`id`)) ENGINE = InnoDB DEFAULT CHARSET = UTF8;');
     })
 }
 
-export function executeQuery(query: string) {
-    try {
-        connection.query(query);
-        console.log(`A query ${query} foi executada com sucesso!`)
-    } catch (err) {
-        console.log(`A query ${query} não pode ser executada.\nCausa: ${err}`)
-    }
+export function executeQuery(query: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        const connection: Connection = getConnection();
+
+        connection.query(query, (err: Query.QueryError) => {
+            if (err) {
+                console.error('Ocorreu um erro ao executar a consulta:', err);
+                reject(err);
+                return;
+            }
+
+            console.log(`A consulta ${query} foi executada com sucesso!`);
+            resolve();
+        });
+    });
 }
+
+
 
 export function closeConnection() {
     if (connection == null) return;

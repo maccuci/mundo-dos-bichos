@@ -41,7 +41,8 @@ export const Auth = () => {
         }
         if (formData.email === "" && formData.password === "") return;
 
-        if (formData.email === "admin@mundodosbichos.com" && formData.password === "admin123") {
+        // if (formData.email === "admin@mundodosbichos.com" && formData.password === "admin123") {
+        if (formData.email === "a@a.com" && formData.password === "admin123") {
             setIsAuthenticated(true);
             setError("")
         } else if (formData.email !== "test@test.com") {
