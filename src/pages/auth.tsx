@@ -52,10 +52,6 @@ export const Auth = () => {
         }
     };
 
-    useEffect(() => {
-        console.log("ALOUUU")
-    })
-
     if (isAuthenticated) {
         return (
             <div>
