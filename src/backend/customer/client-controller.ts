@@ -1,6 +1,7 @@
 import {getConnection} from "../mysql";
 import {Connection, RowDataPacket, QueryError} from "mysql2";
 import {OkPacket, Query} from "mysql2/promise";
+import {deprecated} from "@/utils/deprecated";
 
 export type Customer = {
     id: number;
@@ -11,7 +12,7 @@ export type Customer = {
     phone: string;
 };
 
-export function createCustomer(name: string, email: string, phone: string, petName: string, petService: string): Promise<void> {
+export function createCustomer(name: string, email: string, phone: string, petName: string, petService: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
         const connection = getConnection();
 
@@ -22,9 +23,9 @@ export function createCustomer(name: string, email: string, phone: string, petNa
             if (err) {
                 console.error('Ocorreu um erro ao criar o cliente:', err);
                 reject(err);
-                return;
+                return false;
             }
-            resolve();
+            resolve(true);
         });
     });
 }
@@ -53,7 +54,8 @@ export function customers(): Promise<any[]> {
     });
 }
 
-export function listCustomers(page: number, perPage: number): Promise<Customer[]> {
+// list customers per page
+export function listCustomersPerPage(page: number, perPage: number): Promise<Customer[]> {
     return new Promise<Customer[]>((resolve, reject) => {
         const connection: Connection = getConnection();
         const offset = (page - 1) * perPage;
@@ -87,7 +89,7 @@ export function listCustomers(page: number, perPage: number): Promise<Customer[]
     });
 }
 
-export async function _listCustomers() {
+export async function listCustomersPerArray() {
     const accounts = []
     try {
         const acc = await customers();
@@ -99,7 +101,7 @@ export async function _listCustomers() {
     return accounts;
 }
 
-export function getCustomer(customerId: number): Promise<RowDataPacket | null> {
+export function getCustomerById(customerId: number): Promise<RowDataPacket | null> {
     return new Promise<RowDataPacket | null>((resolve, reject) => {
         const connection: Connection = getConnection();
 
@@ -121,18 +123,44 @@ export function getCustomer(customerId: number): Promise<RowDataPacket | null> {
     });
 }
 
+export function getCustomerByName(customerName: string): Promise<RowDataPacket | null> {
+    return new Promise<RowDataPacket | null>((resolve, reject) => {
+        const connection: Connection = getConnection();
 
-export function updateCustomer(id: number, name: string, email: string, phone: string, petName: string, petService: any) {
-    const connection: Connection = getConnection();
+        const query: string = `SELECT * FROM customers WHERE name = ?`;
+        const values: any[] = [customerName];
 
-    const query: string = `UPDATE customers SET name = ?, email = ?, phone = ?, petName = ?, petService = ? WHERE id = ?`;
+        connection.query(query, values, (err, rows: RowDataPacket[]) => {
+            if (err) {
+                console.error('Ocorreu um erro ao obter o cliente:', err);
+                reject(err);
+                return;
+            }
+            if (rows.length === 0) {
+                resolve(null);
+            } else {
+                resolve(rows[0]);
+            }
+        });
+    });
+}
 
-    connection.query(query, [name, email, phone, petName, petService, id], (err, result) => {
-        if (err) {
-            console.error('Ocorreu um erro ao atualizar o cliente:', err);
-            return;
-        }
-        console.log('Cliente atualizado com sucesso!');
+
+export function updateCustomer(id: number, name: string, email: string, phone: string, petName: string, petService: any): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        const connection: Connection = getConnection();
+        const query: string = `UPDATE customers SET name = ?, email = ?, phone = ?, petName = ?, petService = ? WHERE id = ?`;
+
+        connection.query(query, [name, email, phone, petName, petService, id], (err, result) => {
+            if (err) {
+                console.error('Ocorreu um erro ao atualizar o cliente:', err);
+                reject(err);
+                return;
+            }
+
+            console.log('Cliente atualizado com sucesso!');
+            resolve();
+        });
     });
 }
 
