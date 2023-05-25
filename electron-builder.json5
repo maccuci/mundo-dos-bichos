@@ -16,7 +16,8 @@
     "target": [
       "dmg",
       "zip"
-    ]
+    ],
+    "icon": "icon.ico"
   },
   "win": {
     "target": [
@@ -27,6 +28,7 @@
         ]
       }
     ],
+    "icon": "icon.ico",
     "artifactName": "${productName}_${version}.${ext}"
   },
   "nsis": {

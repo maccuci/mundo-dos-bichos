@@ -47,7 +47,7 @@ Menu.setApplicationMenu(null)
 async function createWindow() {
   win = new BrowserWindow({
     title: 'Mundo dos Bichos',
-    icon: join(process.env.PUBLIC, 'favicon.ico'),
+    icon: join(__dirname, 'icon.ico'),
     webPreferences: {
       preload,
       nodeIntegration: true,
