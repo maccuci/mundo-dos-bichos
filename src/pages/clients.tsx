@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { _listCustomersPerArray } from "../backend/customer/client-controller"
 
 const Clients = () => {
     const itemsPerPage = 4;
@@ -10,9 +11,23 @@ const Clients = () => {
         setCurrentPage(page);
     };
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const acc: any = await _listCustomersPerArray();
+                setClientAccounts(acc);
+            } catch (error) {
+                console.error('Ocorreu um erro ao obter os dados dos clientes:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
     const currentClients = clientAccounts.slice(firstIndex, lastIndex);
+
 
     return (
         <div>
