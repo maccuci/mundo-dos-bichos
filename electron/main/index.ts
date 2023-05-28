@@ -134,7 +134,7 @@ ipcMain.on("fetch-schedules", (event) => {
     fetch('http://localhost:3000/api/schedules', requestOptions)
         .then((response) => response.json())
         .then((data) => {
-            event.sender.send('fetchClientsResponse', data);
+            event.sender.send('fetchSchedulesResponse', data);
         })
         .catch((error) => {
             console.error('Ocorreu um erro ao buscar os clientes:', error);

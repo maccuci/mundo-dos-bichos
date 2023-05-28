@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ipcRenderer } from 'electron';
-import {getConnection} from "@/backend/mysql";
-import {RowDataPacket} from "mysql2/index";
-import {display} from "@/utils/notification";
-import axios from "axios";
 
 const Clients = () => {
     const itemsPerPage = 4;
@@ -57,7 +53,7 @@ const Clients = () => {
                     <ul className="grid grid-cols-2 gap-4 flex-grow">
                         {currentClients.map((client: any) => (
                             <li key={client.id} className="bg-white shadow-md p-4 mt-10 rounded">
-                                <p className="text-center font-bold">Informações de {client.name}</p>
+                                <p className="text-center font-bold">Informações de {client.name} ({client.id})</p>
                                 <p className="text-center">Nome do Animal: {client.petName}</p>
                                 <p className="text-center">Serviço: {client.petService}</p>
                                 <p className="text-center mt-8">Contatos</p>

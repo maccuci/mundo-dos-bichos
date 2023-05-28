@@ -1,8 +1,9 @@
 import {Link} from "react-router-dom";
 import React, {useState} from "react";
-import {createCustomer, updateCustomer, getCustomerByName} from "../backend/customer/client-controller"
+import {createCustomer, updateCustomer, getCustomerById, deleteCustomer} from "@/backend/client/client-controller"
+import {createSchedule, deleteSchedule, updateSchedule} from "../backend/schedule/schedule-controller"
 import {display} from "@/utils/notification";
-import {createSchedule} from "@/backend/schedule/schedule-controller";
+import {ipcRenderer} from "electron";
 
 const Services = () => {
     const [selectedService, setSelectedService] = useState("");
@@ -13,6 +14,8 @@ const Services = () => {
                 return <CreateService/>;
             case "edit":
                 return <EditService/>
+            case "delete":
+                return <DeleteService/>
             default:
                 return null;
         }
@@ -27,7 +30,7 @@ const Services = () => {
                         onClick={() => setSelectedService("create")}
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
                     >
-                        Criar
+                        Agendar
                     </button>
                     <button
                         onClick={() => setSelectedService("edit")}
@@ -53,6 +56,8 @@ const Services = () => {
 };
 
 type FormData = {
+    customerId: number;
+    serviceId: number;
     name: string;
     email: string;
     phone: string;
@@ -64,6 +69,8 @@ type FormData = {
 
 const CreateService = () => {
     const [formData, setFormData] = useState<FormData>({
+        customerId: 0,
+        serviceId: 0,
         name: "",
         email: "",
         phone: "",
@@ -204,13 +211,15 @@ const CreateService = () => {
                     </button>
                 </div>
             </form>
-            {successMessage && display({ message: "Serviço agendado com sucesso!", type: 1 })}
+            {successMessage && <p className="text-green-600 text-center font-bold">Serviço agendado com sucesso!</p>}
         </div>
     );
 };
 
 const EditService = () => {
     const [formData, setFormData] = useState<FormData>({
+        customerId: 0,
+        serviceId: 0,
         name: "",
         email: "",
         phone: "",
@@ -219,7 +228,7 @@ const EditService = () => {
         date: "",
         price: 0
     });
-    const [successMessage, setSuccessMessage] = useState<boolean>(false);
+    const [successMessage, setSuccessMessage] = useState<boolean>();
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {id, value} = event.target;
@@ -229,108 +238,276 @@ const EditService = () => {
         }));
     };
 
-    const handleSubmit = async (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const customer = getCustomerByName(formData.name)
+        try {
+            await new Promise((resolve) => {
+                ipcRenderer.send('fetch-clients');
+                ipcRenderer.once('fetchClientsResponse', (event, data) => {
+                    resolve(data);
+                });
+            });
 
-        if (customer !== null) {
-            updateCustomer(1, formData.name, formData.email, formData.phone, formData.petName, formData.petService)
-        } else {
-            setSuccessMessage(false)
+            await new Promise((resolve) => {
+                ipcRenderer.send('fetch-schedules');
+                ipcRenderer.once('fetchSchedulesResponse', (event, data) => {
+                    resolve(data);
+                });
+            });
+        } catch (error) {
+            console.error('Ocorreu um erro ao buscar os clientes e agendamentos:', error);
+            return;
+        }
+
+        const { customerId, serviceId } = formData;
+        const clientData = await updateCustomer(
+            customerId,
+            formData.name,
+            formData.email,
+            formData.phone,
+            formData.petName,
+            formData.petService
+        ).catch((error) => {
+            console.error('Ocorreu um erro ao editar o cliente:', error);
+            setSuccessMessage(false);
+        });
+
+        if (clientData) {
+            console.log('Cliente editado com sucesso:', clientData);
+            setSuccessMessage(true);
+        }
+
+        const scheduleData = await updateSchedule(
+            serviceId,
+            formData.email,
+            formData.petName,
+            formData.petService,
+            formData.date,
+            formData.price
+        ).catch((error) => {
+            console.error('Ocorreu um erro ao editar o agendamento:', error);
+            setSuccessMessage(false);
+        });
+
+        if (scheduleData) {
+            setSuccessMessage(true);
         }
     };
-
     return (
         <div>
             <form onSubmit={handleSubmit}>
                 <legend className="text-center font-extrabold text-xl mt-2">Editar Serviço</legend>
-                <div className="mb-4">
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                        Nome do Cliente
-                    </label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        onChange={handleInput}
-                        className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                        E-mail
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        onChange={handleInput}
-                        className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                        Telefone
-                    </label>
-                    <input
-                        type="text"
-                        id="phone"
-                        name="phone"
-                        onChange={handleInput}
-                        className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="petName" className="block text-sm font-medium text-gray-700">
-                        Nome do Pet
-                    </label>
-                    <input
-                        type="text"
-                        id="petName"
-                        name="petName"
-                        onChange={handleInput}
-                        className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="service" className="block text-sm font-medium text-gray-700">
-                        Serviço
-                    </label>
-                    <input
-                        type="text"
-                        id="petService"
-                        name="petService"
-                        onChange={handleInput}
-                        className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                        Valor
-                    </label>
-                    <input
-                        type="number"
-                        id="price"
-                        name="price"
-                        min={1}
-                        onChange={handleInput}
-                        className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
-                    />
+                <div className="grid grid-cols-3 gap-4">
+                    <div className="mb-4">
+                        <label htmlFor="customerId" className="block font-medium text-gray-700">
+                            ID do Cliente
+                        </label>
+                        <input
+                            type="number"
+                            id="customerId"
+                            name="customerId"
+                            onChange={handleInput}
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="serviceId" className="block font-medium text-gray-700">
+                            ID do Serviço
+                        </label>
+                        <input
+                            type="number"
+                            id="serviceId"
+                            name="serviceId"
+                            onChange={handleInput}
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="name" className="block font-medium text-gray-700">
+                            Nome do Cliente
+                        </label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            onChange={handleInput}
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="email" className="block font-medium text-gray-700">
+                            E-mail
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            onChange={handleInput}
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="phone" className="block font-medium text-gray-700">
+                            Telefone
+                        </label>
+                        <input
+                            type="text"
+                            id="phone"
+                            name="phone"
+                            onChange={handleInput}
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="petName" className="block font-medium text-gray-700">
+                            Nome do Animal
+                        </label>
+                        <input
+                            type="text"
+                            id="petName"
+                            name="petName"
+                            onChange={handleInput}
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="petService" className="block font-medium text-gray-700">
+                            Serviço
+                        </label>
+                        <input
+                            type="text"
+                            id="petService"
+                            name="petService"
+                            onChange={handleInput}
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="date" className="block font-medium text-gray-700">
+                            Data
+                        </label>
+                        <input
+                            type="datetime-local"
+                            id="date"
+                            name="date"
+                            onChange={handleInput}
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="price" className="block font-medium text-gray-700">
+                            Valor
+                        </label>
+                        <input
+                            type="number"
+                            id="price"
+                            name="price"
+                            onChange={handleInput}
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
                 </div>
                 <div className="text-center">
                     <button
                         type="submit"
-                        className="inline-block px-4 py-2 text-white font-medium bg-blue-500 hover:bg-blue-700 rounded-md"
+                        className="inline-block px-4 py-2 mb-2 text-white font-medium bg-blue-500 hover:bg-blue-700 rounded-md"
                     >
                         Enviar
                     </button>
                 </div>
             </form>
-            {successMessage && display({message: "Serviço editado com sucesso!", type: 1})}
-            {/*{!successMessage && display({ message: "Serviço não pode ser editado!", type: 3 })}*/}
+            {successMessage && <p className="text-green-600 text-center font-bold">Serviço editado com sucesso!</p>}
         </div>
     );
 }
 
+const DeleteService = () => {
+    const handleInput = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        const customerInputElement = document.getElementById('customerId-delete') as HTMLInputElement;
+        const serviceInputElement = document.getElementById('serviceId-delete') as HTMLInputElement;
+        const customerId = parseInt(customerInputElement.value, 10);
+        const serviceId = parseInt(serviceInputElement.value, 10);
+
+        try {
+            ipcRenderer.send('fetch-clients');
+            ipcRenderer.send('fetch-schedules');
+        } catch (error) {
+            console.error('Ocorreu um erro ao buscar os clientes e agendamentos:', error);
+            return;
+        }
+
+        ipcRenderer.once('fetchClientsResponse', (event, data) => {
+            const customer = data.find((item: any) => item.id === customerId);
+            if (customer) {
+                deleteCustomer(customer.id)
+                    .then((success) => {
+                        console.log('Cliente deletado com sucesso:', success);
+                    })
+                    .catch((error) => {
+                        console.error('Ocorreu um erro ao deletar o cliente:', error);
+                    });
+            } else {
+                console.log('Cliente não encontrado.');
+            }
+        });
+
+        ipcRenderer.once('fetchSchedulesResponse', (event, data) => {
+            const schedule = data.find((item: any) => item.id === serviceId);
+            if (schedule) {
+                deleteSchedule(schedule.id)
+                    .then((success) => {
+                        console.log('Agendamento deletado com sucesso:', success);
+                    })
+                    .catch((error) => {
+                        console.error('Ocorreu um erro ao deletar o agendamento:', error);
+                    });
+            } else {
+                console.log('Agendamento não encontrado.');
+            }
+        });
+    };
+
+    return (
+        <div>
+            <form>
+                <legend className="text-center font-extrabold text-xl mt-2">Deletar Serviço</legend>
+                <div className="grid grid-cols-3 gap-4">
+                    <div className="mb-4">
+                        <label htmlFor="customerId-delete" className="block font-medium text-gray-700">
+                            ID do Cliente
+                        </label>
+                        <input
+                            type="number"
+                            id="customerId-delete"
+                            name="customerId-delete"
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="serviceId-delete" className="block font-medium text-gray-700">
+                            ID do Serviço
+                        </label>
+                        <input
+                            type="number"
+                            id="serviceId-delete"
+                            name="serviceId-delete"
+                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
+                        />
+                    </div>
+                </div>
+                <div className="text-center">
+                    <button
+                        type="submit"
+                        className="inline-block px-4 py-2 mb-2 text-white font-medium bg-blue-500 hover:bg-blue-700 rounded-md"
+                        onClick={handleInput}
+                    >
+                        Enviar
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
+};
 
 export default Services;
