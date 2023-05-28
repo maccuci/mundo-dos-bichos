@@ -101,15 +101,17 @@ export async function listCustomersPerArray() {
     return accounts;
 }
 
-export async function _listCustomersPerArray(): Promise<any[]> {
-    try {
-        const acc: any[] = await customers();
-        console.log(acc);
-        return acc;
-    } catch (error) {
-        console.error('Ocorreu um erro ao listar os clientes:', error);
-        throw error;
-    }
+export function _listCustomersPerArray(): Promise<any[]> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const acc: any[] = await customers();
+            console.log(acc);
+            resolve(acc)
+        } catch (error) {
+            console.error('Ocorreu um erro ao listar os clientes:', error);
+            reject(error)
+        }
+    })
 }
 
 export function getCustomerById(customerId: number): Promise<RowDataPacket | null> {
