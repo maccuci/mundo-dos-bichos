@@ -9,7 +9,7 @@ type Schedule = {
     price: number;
 }
 
-export function createSchedule({ petName, emailOwner, service, date, price }: Schedule): Promise<boolean> {
+export function createSchedule(petName: string, emailOwner: string, service: string, date: string, price: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
         const connection = getConnection()
 
