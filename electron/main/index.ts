@@ -119,8 +119,22 @@ ipcMain.on("fetch-clients", (event) => {
     fetch('http://localhost:3000/api/customers', requestOptions)
         .then((response) => response.json())
         .then((data) => {
-            // Retornar os clientes para o processo de renderização
-            event.sender.send('fetchClientsResponse', data); // Usar event.sender.send() em vez de win?.webContents.send()
+            event.sender.send('fetchClientsResponse', data);
+        })
+        .catch((error) => {
+            console.error('Ocorreu um erro ao buscar os clientes:', error);
+        });
+});
+
+ipcMain.on("fetch-schedules", (event) => {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    };
+    fetch('http://localhost:3000/api/schedules', requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+            event.sender.send('fetchClientsResponse', data);
         })
         .catch((error) => {
             console.error('Ocorreu um erro ao buscar os clientes:', error);
