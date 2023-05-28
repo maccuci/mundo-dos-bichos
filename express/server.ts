@@ -22,7 +22,7 @@ expressApp.get("/api/customers", (req, res) => {
 });
 
 expressApp.get("/api/schedules", (req, res) => {
-    const query = "SELECT * FROM customers";
+    const query = "SELECT * FROM schedules";
     const connection = getConnection()
     connection.query(query, (err, results) => {
         if (err) {
