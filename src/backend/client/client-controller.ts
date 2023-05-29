@@ -15,7 +15,6 @@ interface QueryResult extends Array<any> {
     affectedRows?: number;
 }
 
-
 export function createCustomer(name: string, email: string, phone: string, petName: string, petService: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
         const connection = getConnection();
@@ -30,48 +29,6 @@ export function createCustomer(name: string, email: string, phone: string, petNa
                 return false;
             }
             resolve(true);
-        });
-    });
-}
-
-export function getCustomerById(customerId: number): Promise<any | null> {
-    return new Promise<any | null>((resolve, reject) => {
-        const connection: Connection = getConnection();
-
-        const query: string = `SELECT * FROM customers WHERE id = ?`;
-        const values: any[] = [customerId];
-
-        connection.query(query, values, (err, rows: RowDataPacket[]) => {
-            if (err) {
-                console.error('Ocorreu um erro ao obter o cliente:', err);
-                reject(err);
-            } else if (rows.length === 0) {
-                resolve(null);
-            } else {
-                resolve(rows[0]);
-            }
-        });
-    });
-}
-
-export function getCustomerByName(customerName: string): Promise<RowDataPacket | null> {
-    return new Promise<RowDataPacket | null>((resolve, reject) => {
-        const connection: Connection = getConnection();
-
-        const query: string = `SELECT * FROM customers WHERE name = ?`;
-        const values: any[] = [customerName];
-
-        connection.query(query, values, (err, rows: RowDataPacket[]) => {
-            if (err) {
-                console.error('Ocorreu um erro ao obter o cliente:', err);
-                reject(err);
-                return;
-            }
-            if (rows.length === 0) {
-                resolve(null);
-            } else {
-                resolve(rows[0]);
-            }
         });
     });
 }

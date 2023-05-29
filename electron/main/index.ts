@@ -53,8 +53,6 @@ async function createWindow() {
 
     if (url) {
         win.loadURL(url)
-        /* Use the express */
-        // win.loadURL("http://localhost:3000")
     } else {
         win.loadFile(indexHtml)
     }

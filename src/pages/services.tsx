@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import React, {useState} from "react";
-import {createCustomer, updateCustomer, getCustomerById, deleteCustomer} from "@/backend/client/client-controller"
+import {createCustomer, updateCustomer, deleteCustomer} from "@/backend/client/client-controller"
 import {createSchedule, deleteSchedule, updateSchedule} from "../backend/schedule/schedule-controller"
 import {display} from "@/utils/notification";
 import {ipcRenderer} from "electron";
