@@ -5,5 +5,5 @@
 @tailwind utilities;
 
 * {
-    font-family: 'Sora'; 
+    font-family: 'Sora', serif; 
 }

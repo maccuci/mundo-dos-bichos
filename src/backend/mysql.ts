@@ -30,8 +30,6 @@ export function executeQuery(query: string): Promise<void> {
                 reject(err);
                 return;
             }
-
-            console.log(`A consulta ${query} foi executada com sucesso!`);
             resolve();
         });
     });

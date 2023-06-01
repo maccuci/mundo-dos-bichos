@@ -1,15 +1,6 @@
 import {getConnection} from "../mysql";
 import {Connection} from "mysql2";
 
-export type Customer = {
-    id: number;
-    name: string;
-    petName: string;
-    petService: string;
-    email: string;
-    phone: string;
-};
-
 interface QueryResult extends Array<any> {
     affectedRows?: number;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {deleteCustomer} from "@/backend/client/client-controller";
 import Clients from "@/pages/clients";
 
@@ -12,9 +12,12 @@ type Props = {
 }
 
 const ClientItem = ({ id, name, petName, petService, email, phone }: Props) => {
+    const [message, setMessage] = useState(false);
+
     const handleDelete = () => {
         deleteCustomer(id).then(() => {
-            window.location.reload();
+            setMessage(true);
+            setTimeout(() => window.location.reload(), 1000);
         })
     }
 
@@ -30,9 +33,12 @@ const ClientItem = ({ id, name, petName, petService, email, phone }: Props) => {
                     <p className="text-center">Telefone: {phone}</p>
                 </li>
                 <div className="items-center flex justify-center">
-                    <button onClick={handleDelete} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">Excluir</button>
+                    <button onClick={handleDelete}
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">Excluir
+                    </button>
                 </div>
             </li>
+            {message && <p className="text-red-600 font-bold">Cliente removido</p>}
         </div>
     )
 }
