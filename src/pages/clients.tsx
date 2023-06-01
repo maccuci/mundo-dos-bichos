@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { ipcRenderer } from 'electron';
+import React, {useState, useEffect} from "react";
+import {Link} from "react-router-dom";
+import {ipcRenderer} from 'electron';
+import ClientItem from "@/components/client-item";
 
 const Clients = () => {
     const itemsPerPage = 4;
@@ -52,16 +53,13 @@ const Clients = () => {
                 {clientAccounts.length > 0 ? (
                     <ul className="grid grid-cols-2 gap-4 flex-grow">
                         {currentClients.map((client: any) => (
-                            <li key={client.id} className="bg-white shadow-md p-4 mt-10 rounded">
-                                <p className="text-center font-bold">Informações de {client.name} ({client.id})</p>
-                                <p className="text-center">Nome do Animal: {client.petName}</p>
-                                <p className="text-center">Serviço: {client.petService}</p>
-                                <p className="text-center mt-8">Contatos</p>
-                                <li className="">
-                                    <p className="text-center">Email: {client.email}</p>
-                                    <p className="text-center">Telefone: {client.phone}</p>
-                                </li>
-                            </li>
+                            <ClientItem
+                                id={client.id}
+                                name={client.name}
+                                petName={client.petName}
+                                petService={client.petService}
+                                email={client.email}
+                                phone={client.phone}/>
                         ))}
                     </ul>
 
@@ -71,7 +69,7 @@ const Clients = () => {
 
                 <div className="flex justify-center mt-24">
                     {Array.from(
-                        { length: Math.ceil(clientAccounts.length / itemsPerPage) },
+                        {length: Math.ceil(clientAccounts.length / itemsPerPage)},
                         (_, index) => index + 1
                     ).map((page) => (
                         <button

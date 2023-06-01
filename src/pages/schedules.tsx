@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {ipcRenderer} from "electron";
+import ScheduleItem from "@/components/schedule-item";
 
 const Schedules = () => {
     const itemsPerPage = 4;
@@ -53,18 +54,13 @@ const Schedules = () => {
                 {schedules.length > 0 ? (
                     <ul className="grid grid-cols-2 gap-4 flex-grow">
                         {currentSchedules.map((schedule: any) => (
-                            <li key={schedule.id} className="bg-white shadow-md p-4 mt-10 rounded">
-                                <p className="text-center font-bold">Informações de {schedule.petName} ({schedule.id})</p>
-                                {/*<p className="text-center">Nome do Animal: {schedule.petName}</p>*/}
-                                <p className="text-center">Serviço: {schedule.service}</p>
-                                <p className="text-center">Preço: {schedule.price}</p>
-                                <p className="text-center">Data: {new Date(Date.parse(schedule.date)).toLocaleString()}</p>
-
-                                <p className="text-center mt-8">Contatos</p>
-                                <li className="">
-                                    <p className="text-center">Email: {schedule.emailOwner}</p>
-                                </li>
-                            </li>
+                            <ScheduleItem
+                                id={schedule.id}
+                                petName={schedule.petName}
+                                service={schedule.service}
+                                price={schedule.price}
+                                date={schedule.date}
+                                emailOwner={schedule.emailOwner}/>
                         ))}
                     </ul>
 
@@ -74,7 +70,7 @@ const Schedules = () => {
 
                 <div className="flex justify-center mt-24">
                     {Array.from(
-                        { length: Math.ceil(schedules.length / itemsPerPage) },
+                        {length: Math.ceil(schedules.length / itemsPerPage)},
                         (_, index) => index + 1
                     ).map((page) => (
                         <button

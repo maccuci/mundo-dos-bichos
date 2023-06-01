@@ -1,8 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import Masthead from "@/components/masthead";
 import {AuthContext} from "@/components/auth-context";
-import {AiFillEye, AiFillEyeInvisible} from "react-icons/all";
-
+import {AiFillEye, AiFillEyeInvisible} from "react-icons/ai";
 
 export const Auth = () => {
     const [formData, setFormData] = useState({email: "", password: ""});

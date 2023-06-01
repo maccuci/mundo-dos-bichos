@@ -51,7 +51,6 @@ export function deleteSchedule(scheduleId: number): Promise<boolean> {
                 reject(err);
                 return;
             }
-
             if (result.affectedRows && result.affectedRows > 0) {
                 resolve(true);
             } else {

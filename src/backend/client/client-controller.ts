@@ -1,6 +1,5 @@
 import {getConnection} from "../mysql";
-import {Connection, RowDataPacket, QueryError} from "mysql2";
-import {OkPacket, Query} from "mysql2/promise";
+import {Connection} from "mysql2";
 
 export type Customer = {
     id: number;
@@ -62,7 +61,6 @@ export function deleteCustomer(customerId: number): Promise<boolean> {
                 reject(err);
                 return;
             }
-
             if (result.affectedRows && result.affectedRows > 0) {
                 resolve(true);
             } else {

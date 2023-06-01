@@ -2,7 +2,6 @@ import {Link} from "react-router-dom";
 import React, {useState} from "react";
 import {createCustomer, updateCustomer, deleteCustomer} from "@/backend/client/client-controller"
 import {createSchedule, deleteSchedule, updateSchedule} from "../backend/schedule/schedule-controller"
-import {display} from "@/utils/notification";
 import {ipcRenderer} from "electron";
 
 const Services = () => {
@@ -14,8 +13,6 @@ const Services = () => {
                 return <CreateService/>;
             case "edit":
                 return <EditService/>
-            case "delete":
-                return <DeleteService/>
             default:
                 return null;
         }
@@ -24,7 +21,7 @@ const Services = () => {
     return (
         <div>
             <div className="flex flex-col items-center">
-                <h1 className="text-2xl">Serviços</h1>
+                <h1 className="text-2xl mt-4">Serviços</h1>
                 <nav className="flex justify-center gap-2 mt-10">
                     <button
                         onClick={() => setSelectedService("create")}
@@ -36,11 +33,6 @@ const Services = () => {
                         onClick={() => setSelectedService("edit")}
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
                         Editar
-                    </button>
-                    <button
-                        onClick={() => setSelectedService("delete")}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
-                        Excluir
                     </button>
                     <Link
                         to={"/home"}
@@ -259,7 +251,7 @@ const EditService = () => {
             return;
         }
 
-        const { customerId, serviceId } = formData;
+        const {customerId, serviceId} = formData;
         const clientData = await updateCustomer(
             customerId,
             formData.name,
@@ -420,94 +412,5 @@ const EditService = () => {
         </div>
     );
 }
-
-const DeleteService = () => {
-    const handleInput = async (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        const customerInputElement = document.getElementById('customerId-delete') as HTMLInputElement;
-        const serviceInputElement = document.getElementById('serviceId-delete') as HTMLInputElement;
-        const customerId = parseInt(customerInputElement.value, 10);
-        const serviceId = parseInt(serviceInputElement.value, 10);
-
-        try {
-            ipcRenderer.send('fetch-clients');
-            ipcRenderer.send('fetch-schedules');
-        } catch (error) {
-            console.error('Ocorreu um erro ao buscar os clientes e agendamentos:', error);
-            return;
-        }
-
-        ipcRenderer.once('fetchClientsResponse', (event, data) => {
-            const customer = data.find((item: any) => item.id === customerId);
-            if (customer) {
-                deleteCustomer(customer.id)
-                    .then((success) => {
-                        console.log('Cliente deletado com sucesso:', success);
-                    })
-                    .catch((error) => {
-                        console.error('Ocorreu um erro ao deletar o cliente:', error);
-                    });
-            } else {
-                console.log('Cliente não encontrado.');
-            }
-        });
-
-        ipcRenderer.once('fetchSchedulesResponse', (event, data) => {
-            const schedule = data.find((item: any) => item.id === serviceId);
-            if (schedule) {
-                deleteSchedule(schedule.id)
-                    .then((success) => {
-                        console.log('Agendamento deletado com sucesso:', success);
-                    })
-                    .catch((error) => {
-                        console.error('Ocorreu um erro ao deletar o agendamento:', error);
-                    });
-            } else {
-                console.log('Agendamento não encontrado.');
-            }
-        });
-    };
-
-    return (
-        <div>
-            <form>
-                <legend className="text-center font-extrabold text-xl mt-2">Deletar Serviço</legend>
-                <div className="grid grid-cols-3 gap-4">
-                    <div className="mb-4">
-                        <label htmlFor="customerId-delete" className="block font-medium text-gray-700">
-                            ID do Cliente
-                        </label>
-                        <input
-                            type="number"
-                            id="customerId-delete"
-                            name="customerId-delete"
-                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="serviceId-delete" className="block font-medium text-gray-700">
-                            ID do Serviço
-                        </label>
-                        <input
-                            type="number"
-                            id="serviceId-delete"
-                            name="serviceId-delete"
-                            className="mt-1 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full"
-                        />
-                    </div>
-                </div>
-                <div className="text-center">
-                    <button
-                        type="submit"
-                        className="inline-block px-4 py-2 mb-2 text-white font-medium bg-blue-500 hover:bg-blue-700 rounded-md"
-                        onClick={handleInput}
-                    >
-                        Enviar
-                    </button>
-                </div>
-            </form>
-        </div>
-    );
-};
 
 export default Services;
