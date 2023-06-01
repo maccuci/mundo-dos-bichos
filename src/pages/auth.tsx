@@ -44,7 +44,7 @@ export const Auth = () => {
         if (formData.email === "a@a.com" && formData.password === "admin123") {
             setIsAuthenticated(true);
             setError("")
-        } else if (formData.email !== "test@test.com") {
+        } else if (formData.email !== "a@a.com") {
             setError("O email está incorreto!");
         } else {
             setError("A senha está incorreta!");
