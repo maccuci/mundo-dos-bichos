@@ -1,40 +1,42 @@
-// @ts-ignore
-import express from "express";
-import {getConnection} from "../src/backend/mysql";
-import {join} from "node:path";
+//@ts-ignore
+import express, { Request, Response, NextFunction } from "express";
+import path from "path";
+import { getConnection } from "../src/backend/mysql";
 
 export const expressApp = express();
 
-process.env.DIST_ELECTRON = join(__dirname, '../')
-process.env.DIST = join(process.env.DIST_ELECTRON, '../dist')
+process.env.DIST_ELECTRON = path.join(__dirname, "../");
+process.env.DIST = path.join(process.env.DIST_ELECTRON, "../dist");
 
-const fetchApis = () => {
-    expressApp.get("/api/customers", (req, res) => {
-        const query = "SELECT * FROM customers";
-        const connection = getConnection()
-        connection.query(query, (err, results) => {
-            if (err) {
-                console.error("Ocorreu um erro ao buscar os clientes:", err);
-                res.status(500).json({ error: "Erro ao buscar clientes" });
-            } else {
-                res.json(results);
-            }
-        });
+expressApp.use((req: Request, res: Response, next: NextFunction) => {
+    console.log(`[${new Date().toLocaleString()}] ${req.method} ${req.url}`);
+    next();
+});
+
+expressApp.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err);
+    res.status(500).json({ error: "Ocorreu um erro no servidor" });
+});
+
+const fetchFromTable = (tableName: string, res: Response) => {
+    const query = `SELECT * FROM ${tableName}`;
+    const connection = getConnection();
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error(`Ocorreu um erro ao buscar os ${tableName}:`, err);
+            res.status(500).json({ error: `Erro ao buscar ${tableName}` });
+        } else {
+            res.json(results);
+        }
     });
+};
 
-    expressApp.get("/api/schedules", (req, res) => {
-        const query = "SELECT * FROM schedules";
-        const connection = getConnection()
-        connection.query(query, (err, results) => {
-            if (err) {
-                console.error("Ocorreu um erro ao buscar os agendamentos:", err);
-                res.status(500).json({ error: "Erro ao buscar agendamentos" });
-            } else {
-                res.json(results);
-            }
-        });
-    });
-}
+expressApp.get("/api/customers", (req: Request, res: Response) => {
+    fetchFromTable("customers", res);
+});
 
-fetchApis();
+expressApp.get("/api/schedules", (req: Request, res: Response) => {
+    fetchFromTable("schedules", res);
+});
+
 expressApp.use(express.static(process.env.DIST));

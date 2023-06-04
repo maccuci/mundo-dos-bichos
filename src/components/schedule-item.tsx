@@ -37,7 +37,7 @@ const ScheduleItem = ({id, petName, service, price, date, emailOwner}: Props) =>
                     </button>
                 </div>
             </li>
-            {message && <p className="text-red-600 font-bold">Agendamento removido</p>}
+            {message && <p className="text-red-600 text-center font-bold">Agendamento removido</p>}
         </div>
     )
 }
