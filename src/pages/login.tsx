@@ -74,7 +74,7 @@ function Login() {
                                 className="appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
                                 id="password"
                                 type={showPassword ? "text" : "password"}
-                                placeholder="Password"
+                                placeholder="Senha"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
@@ -97,12 +97,12 @@ function Login() {
                     )}
                     <div className="flex items-center justify-between">
                         <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring transition-colors"
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring transition-colors"
                             type="submit"
                         >
                             Entrar
                         </button>
-                        <a className="text-sm text-gray-600 hover:text-gray-800" href="#">
+                        <a className="text-sm text-gray-600 hover:text-gray-800 transition-colors" href="#">
                             Esqueceu a Senha?
                         </a>
                     </div>

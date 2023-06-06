@@ -41,6 +41,7 @@ const ClientItem = ({ id, name, petName, petService, email, phone }: Props) => {
                     </button>
                 </div>
             </div>
+            {message && <p className="text-red-600 text-center font-bold">Cliente removido</p>}
         </div>
     )
 }
