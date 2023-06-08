@@ -102,7 +102,7 @@ function Login() {
                         >
                             Entrar
                         </button>
-                        <a className="text-sm text-gray-600 hover:text-gray-800 transition-colors" href="#">
+                        <a className="text-sm text-gray-600 hover:text-gray-800 transition-colors" href="/">
                             Esqueceu a Senha?
                         </a>
                     </div>
