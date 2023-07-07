@@ -20,13 +20,13 @@ As tecnologias e linguagens utlizadas neste projetos são as conseguintes:
 
 ## Aplicação
 Para instalar os pacotes referentes ao npm
-> cd mundo-dos-bichos && yarn
+> $ cd mundo-dos-bichos && yarn
 
 Para dar início a aplicação em ambiente de desenvolvivendo
-> yarn dev
+> $ yarn dev
 
 Para utilizar a versão de final e criar o instalador
-> yarn build
+> $ yarn build
 ---
 
 ### **ATENÇÃO** 
