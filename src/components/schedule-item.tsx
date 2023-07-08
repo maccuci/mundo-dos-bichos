@@ -22,7 +22,7 @@ const ScheduleItem = ({
   const handleDelete = () => {
     deleteSchedule(id).then(() => {
       setMessage(true);
-      setTimeout(() => window.location.reload(), 1000);
+      setTimeout(() => window.location.reload(), 1200);
     });
   };
 

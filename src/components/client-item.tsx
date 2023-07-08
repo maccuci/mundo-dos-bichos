@@ -17,7 +17,7 @@ const ClientItem = ({ id, name, petName, petService, email, phone }: Props) => {
   const handleDelete = () => {
     deleteCustomer(id).then(() => {
       setMessage(true);
-      setTimeout(() => window.location.reload(), 1000);
+      setTimeout(() => window.location.reload(), 1200);
     });
   };
 

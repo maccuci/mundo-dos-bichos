@@ -37,7 +37,6 @@ const Schedules = () => {
     };
   }, []);
 
-  // @ts-ignore
   return (
     <div>
       <div className="bg-gray-200 p-4 min-h-screen flex flex-col">

@@ -19,7 +19,7 @@ function Login() {
     } else if (email !== "admin@mundodosbichos.com") {
       setErrorMessage("Email incorreto.");
     } else {
-      setErrorMessage("Senha incorreta.");
+      setErrorMessage("Senha incorreta.")
     }
   };
 

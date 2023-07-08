@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CreateService from "@/components/services/create-service";
 import EditService from "@/components/services/edit-service";
+import { isConnected } from "@/backend/mysql";
 
 const Services = () => {
   const [selectedService, setSelectedService] = useState("");
@@ -29,7 +30,7 @@ const Services = () => {
           onClick={() => handleServiceSelection("create")}
           className={`py-3 px-6 rounded-lg transition-colors text-white font-semibold border border-blue-700 ${
             selectedService === "create"
-              ? "bg-blue-700 text-white underline underline-offset-8"
+              ? "bg-blue-600 text-white underline underline-offset-8"
               : "bg-blue-700 text-white hover:bg-white hover:text-blue-700"
           }`}
         >
@@ -40,7 +41,7 @@ const Services = () => {
           onClick={() => handleServiceSelection("edit")}
           className={`py-3 px-6 rounded-lg transition-colors text-white font-semibold border border-blue-700 ${
             selectedService === "edit"
-              ? "bg-blue-700 text-white underline underline-offset-8"
+              ? "bg-blue-600 text-white underline underline-offset-8"
               : "bg-blue-700 text-white hover:bg-white hover:text-blue-700"
           }`}
         >

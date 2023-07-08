@@ -40,7 +40,7 @@ export function executeQuery(query: string): Promise<void> {
 }
 
 export function closeConnection() {
-  if (connection == null) return;
+  if (!isConnected()) return;
 
   connection.end((err) => {
     if (err) {
@@ -49,6 +49,10 @@ export function closeConnection() {
     }
     console.log("Conexão fechada com o banco de dados.");
   });
+}
+
+export function isConnected() {
+  return connection !== null;
 }
 
 export function getConnection() {
