@@ -29,7 +29,7 @@ Para dar início a aplicação em ambiente de desenvolvivendo
 $ yarn dev
 ```
 
-Para utilizar a versão de final e criar o instalador
+Para utilizar a versão final e criar o instalador
 ```
 $ yarn build
 ```
