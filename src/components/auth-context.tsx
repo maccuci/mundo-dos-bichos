@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useMemo } from "react";
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -16,19 +16,18 @@ export const AuthContext = createContext<AuthContextType>({
   handleLogout: () => {},
 });
 
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    console.log(isAuthenticated);
   };
 
-  const authContextValue: AuthContextType = {
+  const authContextValue: AuthContextType = useMemo(() => ({
     isAuthenticated,
     setIsAuthenticated,
     handleLogout,
-  };
+  }), [isAuthenticated]);
 
   return (
     <AuthContext.Provider value={authContextValue}>
