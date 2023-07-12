@@ -1,12 +1,21 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ipcRenderer } from "electron";
 import ClientItem from "@/components/client-item";
 
+interface Client {
+  id: number;
+  name: string;
+  petName: string;
+  petService: string;
+  email: string;
+  phone: string;
+}
+
 const Clients = () => {
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
-  const [clientAccounts, setClientAccounts] = useState<any>([]);
+  const [clientAccounts, setClientAccounts] = useState<Client[]>([]);
 
   const changePage = (page: number) => {
     setCurrentPage(page);
@@ -27,13 +36,18 @@ const Clients = () => {
 
     fetchClients();
 
-    ipcRenderer.on("fetchClientsResponse", (event, data) => {
+    const fetchClientsResponseHandler = (event: any, data: Client[]) => {
       setClientAccounts(data);
       console.log(data);
-    });
+    };
+
+    ipcRenderer.on("fetchClientsResponse", fetchClientsResponseHandler);
 
     return () => {
-      ipcRenderer.removeAllListeners("fetchClientsResponse");
+      ipcRenderer.removeListener(
+        "fetchClientsResponse",
+        fetchClientsResponseHandler
+      );
     };
   }, []);
 
@@ -52,8 +66,9 @@ const Clients = () => {
 
         {clientAccounts.length > 0 ? (
           <ul className="grid grid-cols-2 gap-4 flex-grow">
-            {currentClients.map((client: any) => (
+            {currentClients.map((client: Client) => (
               <ClientItem
+                key={client.id}
                 id={client.id}
                 name={client.name}
                 petName={client.petName}

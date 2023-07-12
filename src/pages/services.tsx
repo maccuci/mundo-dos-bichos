@@ -1,19 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import CreateService from "@/components/services/create-service";
 import EditService from "@/components/services/edit-service";
-import { isConnected } from "@/backend/mysql";
 
 const Services = () => {
   const [selectedService, setSelectedService] = useState("");
 
   const renderServiceForm = (serviceType: string) => {
-    if (serviceType === "create") {
-      return <CreateService />;
-    } else if (serviceType === "edit") {
-      return <EditService />;
-    }
-    return null;
+    const types: any = {
+      create: <CreateService />,
+      edit: <EditService />,
+    };
+    return types[serviceType] ?? null;
   };
 
   const handleServiceSelection = (serviceType: string) => {

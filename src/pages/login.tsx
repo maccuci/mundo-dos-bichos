@@ -13,14 +13,11 @@ function Login() {
   const handleLogin = (event: any) => {
     event.preventDefault();
 
-    if (email === "admin@mundodosbichos.com" && password === "admin") {
-      setErrorMessage("");
-      setIsAuthenticated(true);
-    } else if (email !== "admin@mundodosbichos.com") {
-      setErrorMessage("Email incorreto.");
-    } else {
-      setErrorMessage("Senha incorreta.")
-    }
+    const ifIsAuthenticated = email === "admin@mundodosbichos.com" && password === "admin"
+    const errorMsg = ifIsAuthenticated ? "" : email !== "admin@mundodosbichos.com" ? "Email incorreto" : "Senha incorreta"
+
+    setIsAuthenticated(ifIsAuthenticated)
+    setErrorMessage(errorMsg)
   };
 
   const togglePasswordVisibility = () => {

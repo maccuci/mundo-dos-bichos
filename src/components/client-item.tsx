@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { deleteCustomer } from "@/backend/client/client-controller";
-import Clients from "@/pages/clients";
 
 type Props = {
   id: number;
@@ -17,7 +16,7 @@ const ClientItem = ({ id, name, petName, petService, email, phone }: Props) => {
   const handleDelete = () => {
     deleteCustomer(id).then(() => {
       setMessage(true);
-      setTimeout(() => window.location.reload(), 1200);
+      setTimeout(() => window.location.reload(), 800);
     });
   };
 

@@ -1,7 +1,5 @@
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 
-import { ToastContainer } from "react-toastify";
-
 import Masthead from "@/components/masthead";
 import Schedules from "@/pages/schedules";
 import Services from "@/pages/services";
@@ -13,7 +11,6 @@ import Login from "@/pages/login";
 const App = () => {
   return (
     <AuthProvider>
-      <ToastContainer />
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />

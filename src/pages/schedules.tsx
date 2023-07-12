@@ -1,12 +1,21 @@
 import { Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
 import ScheduleItem from "@/components/schedule-item";
+
+interface Schedule {
+  id: number;
+  petName: string;
+  service: string;
+  price: number;
+  date: string;
+  emailOwner: string;
+}
 
 const Schedules = () => {
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
-  const [schedules, setSchedules] = useState<any>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
 
   const changePage = (page: number) => {
     setCurrentPage(page);
@@ -27,13 +36,15 @@ const Schedules = () => {
 
     fetchSchedules();
 
-    ipcRenderer.on("fetchSchedulesResponse", (event, data) => {
+    const fetchSchedulesResponseHandler = (event: any, data: Schedule[]) => {
       setSchedules(data);
       console.log(data);
-    });
+    };
+
+    ipcRenderer.on("fetchSchedulesResponse", fetchSchedulesResponseHandler);
 
     return () => {
-      ipcRenderer.removeAllListeners("fetchSchedulesResponse");
+      ipcRenderer.removeListener("fetchSchedulesResponse", fetchSchedulesResponseHandler);
     };
   }, []);
 
@@ -52,8 +63,9 @@ const Schedules = () => {
 
         {schedules.length > 0 ? (
           <ul className="grid grid-cols-2 gap-4 flex-grow">
-            {currentSchedules.map((schedule: any) => (
+            {currentSchedules.map((schedule: Schedule) => (
               <ScheduleItem
+                key={schedule.id}
                 id={schedule.id}
                 petName={schedule.petName}
                 service={schedule.service}
