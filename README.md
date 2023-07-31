@@ -39,7 +39,7 @@ $ yarn build
 
 O backend deste projeto foi refeito usando a tecnologia Spring Boot, você pode conferir mais detalhes [Clicando Aqui](https://github.com/maccuci/mdb-spring)
 
-_**LEGADO**_
+## _**LEGADO**_
 
 Para finalizar, você precisa criar uma **Database** em seu servidor MySQL
 com o nome de ```"mundo-dos-bichos"```, pode ser via ```Xampp```, ```MySQL Workbench``` e entre outros.
