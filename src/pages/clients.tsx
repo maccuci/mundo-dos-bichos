@@ -28,7 +28,7 @@ const Clients = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        ipcRenderer.send("fetch-clients");
+        ipcRenderer.send("fetch-clients-test");
       } catch (error) {
         console.error("Ocorreu um erro ao buscar os clientes:", error);
       }
@@ -41,11 +41,11 @@ const Clients = () => {
       console.log(data);
     };
 
-    ipcRenderer.on("fetchClientsResponse", fetchClientsResponseHandler);
+    ipcRenderer.on("fetchClientsResponse-test", fetchClientsResponseHandler);
 
     return () => {
       ipcRenderer.removeListener(
-        "fetchClientsResponse",
+        "fetchClientsResponse-test",
         fetchClientsResponseHandler
       );
     };

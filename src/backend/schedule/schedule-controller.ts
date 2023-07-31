@@ -16,7 +16,7 @@ export function createSchedule(
     const connection = getConnection();
 
     const query: string =
-      `INSERT INTO schedules (emailOwner, petName, service, date, price) VALUES (?, ?, ?, ?, ?)`;
+      `INSERT INTO schedules (email_owner, pet_name, service, date, price) VALUES (?, ?, ?, ?, ?)`;
     const values: any[] = [emailOwner, petName, service, date, price];
 
     connection.query(query, values, (err, result) => {
@@ -41,7 +41,7 @@ export function updateSchedule(
   return new Promise<boolean>((resolve, reject) => {
     const connection: Connection = getConnection();
     const query: string =
-      `UPDATE schedules SET petName = ?, service = ?, emailOwner = ?, date = ?, price = ? WHERE id = ?`;
+      `UPDATE schedules SET pet_name = ?, service = ?, email_owner = ?, date = ?, price = ? WHERE id = ?`;
 
     connection.query(
       query,

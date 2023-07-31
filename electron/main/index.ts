@@ -139,6 +139,21 @@ ipcMain.on("fetch-clients", (event) => {
     });
 });
 
+ipcMain.on("fetch-clients-test", (event) => {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+  fetch("http://localhost:8080/api/customers", requestOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      event.sender.send("fetchClientsResponse-test", data);
+    })
+    .catch((error) => {
+      console.error("Ocorreu um erro ao buscar os clientes:", error);
+    });
+});
+
 ipcMain.on("fetch-schedules", (event) => {
   const requestOptions = {
     method: "GET",
@@ -153,6 +168,7 @@ ipcMain.on("fetch-schedules", (event) => {
       console.error("Ocorreu um erro ao buscar os clientes:", error);
     });
 });
+
 
 // New window example arg: new windows url
 ipcMain.handle("open-win", (_, arg) => {

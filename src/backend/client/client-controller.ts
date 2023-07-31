@@ -16,7 +16,7 @@ export function createCustomer(
     const connection = getConnection();
 
     const query: string =
-      `INSERT INTO customers (name, email, phone, petName, petService) VALUES (?, ?, ?, ?, ?)`;
+      `INSERT INTO customers (name, email, phone, pet_name, pet_service) VALUES (?, ?, ?, ?, ?)`;
     const values: any[] = [name, email, phone, petName, petService];
 
     connection.query(query, values, (err, result) => {
@@ -41,7 +41,7 @@ export function updateCustomer(
   return new Promise<boolean>((resolve, reject) => {
     const connection: Connection = getConnection();
     const query: string =
-      `UPDATE customers SET name = ?, email = ?, phone = ?, petName = ?, petService = ? WHERE id = ?`;
+      `UPDATE customers SET name = ?, email = ?, phone = ?, pet_name = ?, pet_service = ? WHERE id = ?`;
 
     connection.query(
       query,

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createCustomer } from "@/backend/client/client-controller";
 import { createSchedule } from "@/backend/schedule/schedule-controller";
+import axios from "axios";
 
 const CreateService = () => {
   const [formData, setFormData] = useState<ServiceFormData>({
@@ -26,24 +27,26 @@ const CreateService = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const successCustomer = await createCustomer(
-      formData.name,
-      formData.email,
-      formData.phone,
-      formData.petName,
-      formData.petService
-    );
 
-    const successSchedule = await createSchedule(
-      formData.petName,
-      formData.email,
-      formData.petService,
-      formData.date,
-      formData.price
-    );
+    const url = "http://localhost:8080/api/customers";
 
-    if (successCustomer && successSchedule) {
-      setSuccessMessage(true);
+    try {
+      const response = await axios.post(url, {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        petName: formData.petName,
+        petService: formData.petService,
+      });
+
+      if (response.status === 201) {
+        const customerData = response.data;
+        console.log("Cliente criado:", customerData);
+
+        setSuccessMessage(true);
+      }
+    } catch (error) {
+      console.error("Erro ao criar cliente:", error);
     }
   };
 
