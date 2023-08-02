@@ -7,7 +7,7 @@ interface QueryResult extends Array<any> {
 
 export function createSchedule(
   petName: string,
-  emailOwner: string,
+  email_owner: string,
   service: string,
   date: string,
   price: number,
@@ -17,7 +17,7 @@ export function createSchedule(
 
     const query: string =
       `INSERT INTO schedules (email_owner, pet_name, service, date, price) VALUES (?, ?, ?, ?, ?)`;
-    const values: any[] = [emailOwner, petName, service, date, price];
+    const values: any[] = [email_owner, petName, service, date, price];
 
     connection.query(query, values, (err, result) => {
       if (err) {
@@ -33,7 +33,7 @@ export function createSchedule(
 export function updateSchedule(
   id: number,
   email: string,
-  petName: string,
+  pet_name: string,
   service: string,
   date: string,
   price: number,
@@ -45,7 +45,7 @@ export function updateSchedule(
 
     connection.query(
       query,
-      [petName, service, email, date, price, id],
+      [pet_name, service, email, date, price, id],
       (err, result) => {
         if (err) {
           console.error("Ocorreu um erro ao atualizar o agendamento:", err);

@@ -28,10 +28,10 @@ const CreateService = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const url = "http://localhost:8080/api/customers";
+    let url = "http://localhost:8080/api/customers";
 
     try {
-      const response = await axios.post(url, {
+      const responseCustomer = await axios.post(url, {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
@@ -39,9 +39,20 @@ const CreateService = () => {
         petService: formData.petService,
       });
 
-      if (response.status === 201) {
-        const customerData = response.data;
+      url = "http://localhost:8080/api/schedules";
+      const responseSchedule = await axios.post(url, {
+        email: formData.email,
+        pet_name: formData.petName,
+        service: formData.petService,
+        date: new Date(formData.date),
+        price: formData.price
+      });
+
+      if (responseCustomer.status === 201 && responseSchedule.status === 201) {
+        const customerData = responseCustomer.data;
         console.log("Cliente criado:", customerData);
+        const scheduleData = responseSchedule.data;
+        console.log("Agendamento criado:", scheduleData);
 
         setSuccessMessage(true);
       }

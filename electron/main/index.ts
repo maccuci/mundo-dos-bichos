@@ -93,7 +93,7 @@ const noti = () => {
 app.whenReady().then(() => {
   createWindow();
   noti();
-  createConnection();
+  // createConnection();
 
   expressApp.listen(3000);
 });
@@ -129,25 +129,10 @@ ipcMain.on("fetch-clients", (event) => {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   };
-  fetch("http://localhost:3000/api/customers", requestOptions)
-    .then((response) => response.json())
-    .then((data) => {
-      event.sender.send("fetchClientsResponse", data);
-    })
-    .catch((error) => {
-      console.error("Ocorreu um erro ao buscar os clientes:", error);
-    });
-});
-
-ipcMain.on("fetch-clients-test", (event) => {
-  const requestOptions = {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  };
   fetch("http://localhost:8080/api/customers", requestOptions)
     .then((response) => response.json())
     .then((data) => {
-      event.sender.send("fetchClientsResponse-test", data);
+      event.sender.send("fetchClientsResponse", data);
     })
     .catch((error) => {
       console.error("Ocorreu um erro ao buscar os clientes:", error);
@@ -159,13 +144,13 @@ ipcMain.on("fetch-schedules", (event) => {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   };
-  fetch("http://localhost:3000/api/schedules", requestOptions)
+  fetch("http://localhost:8080/api/schedules", requestOptions)
     .then((response) => response.json())
     .then((data) => {
       event.sender.send("fetchSchedulesResponse", data);
     })
     .catch((error) => {
-      console.error("Ocorreu um erro ao buscar os clientes:", error);
+      console.error("Ocorreu um erro ao buscar os agendamentos:", error);
     });
 });
 

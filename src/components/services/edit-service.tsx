@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ipcRenderer } from "electron";
 import { updateCustomer } from "@/backend/client/client-controller";
 import { updateSchedule } from "@/backend/schedule/schedule-controller";
+import axios from "axios";
 
 const EditService = () => {
   const [formData, setFormData] = useState<ServiceFormData>({
@@ -23,6 +24,30 @@ const EditService = () => {
       ...prevFormData,
       [id]: value,
     }));
+  };
+
+  const handleTest = async (event: React.FocusEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const url = "http://localhost:8080/api/schedules";
+
+    try {
+      const { serviceId } = formData;
+      await axios.post(url, {
+        id: serviceId,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        petName: formData.petName,
+        petService: formData.petService,
+      });
+    } catch (error) {
+      console.error(
+        "Ocorreu um erro ao buscar os clientes e agendamentos:",
+        error
+      );
+      return;
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

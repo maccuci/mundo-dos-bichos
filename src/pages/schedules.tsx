@@ -9,7 +9,7 @@ interface Schedule {
   service: string;
   price: number;
   date: string;
-  emailOwner: string;
+  email_owner: string;
 }
 
 const Schedules = () => {
@@ -71,7 +71,7 @@ const Schedules = () => {
                 service={schedule.service}
                 price={schedule.price}
                 date={schedule.date}
-                emailOwner={schedule.emailOwner}
+                emailOwner={schedule.email_owner}
               />
             ))}
           </ul>
